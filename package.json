@@ -1,13 +1,14 @@
 {
-	"name": "ask-me-anything",
-	"scripts": {
+  "name": "ask-me-anything",
+  "scripts": {
     "dev": "turbo run dev --parallel --",
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "preview": "turbo run preview"
+    "preview": "turbo run preview",
+    "migrate": "turbo run migrate"
   },
-	"devDependencies": {
-		"turbo": "^2.1.2"
-	},
-	"packageManager": "pnpm@9.0.0"
+  "devDependencies": {
+    "turbo": "^2.1.2"
+  },
+  "packageManager": "pnpm@9.0.0"
 }

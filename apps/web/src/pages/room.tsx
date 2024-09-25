@@ -1,8 +1,19 @@
-import { ArrowRight, ArrowUp, Share2 } from "lucide-react";
+import { ArrowRight, Check, Share2 } from "lucide-react";
 import { useParams } from "react-router-dom";
+import { Task } from "../components/task";
+import { useState } from "react";
 
 export function Room() {
-  let { roomId } = useParams();
+  const { roomId } = useParams();
+  const [isCopied, setIsCopied] = useState(false);
+
+  async function handleCopyUrl() {
+    setIsCopied(true);
+    await navigator.clipboard.writeText(window.location.href);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    setIsCopied(false);
+  }
+
   return (
     <div className="w-full h-screen pt-10">
       <div className="w-full max-w-[640px] space-y-6 mx-auto">
@@ -14,7 +25,7 @@ export function Room() {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <g clip-path="url(#clip0_3101_464)">
+            <g clipPath="url(#clip0_3101_464)">
               <path
                 d="M9.68549 9.61254C10.1032 8.74462 10.5222 7.87713 10.9381 7.00834C11.3653 6.11523 11.7782 5.21518 12.2202 4.32989C12.4469 3.87531 12.5407 3.41074 12.5137 2.90796C12.4334 1.4209 11.2003 0.349343 9.72978 0.535172C8.49454 0.691476 7.62184 1.39832 7.05177 2.47508C6.68054 3.17585 6.36229 3.9044 6.02363 4.62209C5.71015 5.28682 5.37019 5.93939 5.09015 6.61975C5.05628 6.68314 5.01981 6.74566 4.98898 6.81035C4.17707 8.50799 3.36168 10.2039 2.55628 11.9041C1.78258 13.5366 1.02059 15.1748 0.25036 16.8091C0.0410856 17.2532 -0.0292513 17.7165 0.0115614 18.2023C0.128355 19.583 1.30845 20.5977 2.6848 20.4744C3.9869 20.3576 4.88695 19.6243 5.43445 18.4889C6.28805 16.7187 7.12471 14.9395 7.97743 13.1689C8.54795 11.984 9.11628 10.7983 9.68549 9.61298V9.61254Z"
                 fill="#FB923C"
@@ -44,9 +55,22 @@ export function Room() {
             Codigo da sala: <span className="dark:text-zinc-300">{roomId}</span>
           </span>
 
-          <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg dark:bg-zinc-800 dark:text-zinc-300">
-            Compartilhar
-            <Share2 className="size-4" />
+          <button
+            onClick={handleCopyUrl}
+            className="flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg dark:bg-zinc-800 dark:text-zinc-300 data-[copied=true]:bg-green-700 data-[copied=true]:text-green-950"
+            data-copied={isCopied}
+          >
+            {isCopied ? (
+              <>
+                Copiado
+                <Check className="size-4" />
+              </>
+            ) : (
+              <>
+                Compartilhar
+                <Share2 className="size-4" />
+              </>
+            )}
           </button>
         </div>
 
@@ -66,17 +90,12 @@ export function Room() {
 
         <ul className="space-y-8 list-decimal">
           {Array.from({ length: 5 }, (_, i) => (
-            <li key={i} className="space-y-3">
-              <span className="dark:text-zinc-100">
-                O que é GoLang e quais são suas principais vantagens em
-                comparação com outras linguagens de programação como Python,
-                Java ou C++?
-              </span>
-              <button className="text-sm w-fit flex items-center gap-2 text-orange-400">
-                <ArrowUp className="size-4" />
-                Curtir pergunta (182)
-              </button>
-            </li>
+            <Task
+              key={i}
+              description="O que é GoLang e quais são suas principais vantagens em comparação com outras linguagens de programação como Python, Java ou C++?"
+              answered={i > 2}
+              reactions={Math.floor(i * Math.PI * Math.random())}
+            />
           ))}
         </ul>
       </div>

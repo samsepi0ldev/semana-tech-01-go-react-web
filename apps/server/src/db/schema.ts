@@ -1,4 +1,10 @@
-import { text, pgTable, boolean, integer } from "drizzle-orm/pg-core";
+import {
+  text,
+  pgTable,
+  boolean,
+  integer,
+  timestamp,
+} from "drizzle-orm/pg-core";
 import { createId } from "@paralleldrive/cuid2";
 
 export const rooms = pgTable("rooms", {
@@ -18,4 +24,7 @@ export const asks = pgTable("asks", {
   description: text("description").notNull(),
   answered: boolean("answered").default(false),
   reactions: integer("reactions").default(0).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });

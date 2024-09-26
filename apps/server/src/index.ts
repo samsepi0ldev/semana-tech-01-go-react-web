@@ -10,6 +10,7 @@ import { eq, and, sql } from "drizzle-orm";
 
 import { db } from "./db";
 import { rooms, asks } from "./db/schema";
+import { asc } from "drizzle-orm";
 
 const app = fastify({
   logger: true,
@@ -53,9 +54,41 @@ app.get(
   },
   async (req, reply) => {
     const { roomId } = req.params;
-    const data = await db.select().from(asks).where(eq(asks.roomId, roomId));
+    const data = await db
+      .select()
+      .from(asks)
+      .where(eq(asks.roomId, roomId))
+      .orderBy(asc(asks.creatadAt));
 
     return reply.send(data);
+  },
+);
+
+app.post(
+  "/room/:roomId/asks",
+  {
+    schema: {
+      params: z.object({
+        roomId: z.string().cuid2(),
+      }),
+      body: z.object({
+        description: z.string().min(1),
+      }),
+    },
+  },
+  async (req, reply) => {
+    const { roomId } = req.params;
+    const { description } = req.body;
+
+    const data = await db
+      .insert(asks)
+      .values({
+        description,
+        roomId,
+      })
+      .returning();
+
+    return reply.send(data[0]);
   },
 );
 

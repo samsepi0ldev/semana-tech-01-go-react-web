@@ -1,11 +1,43 @@
 import { ArrowRight, Check, Share2 } from "lucide-react";
+import { FormEvent, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+import { api } from "../lib/api";
 import { Task } from "../components/task";
-import { useState } from "react";
+import { createAsk } from "./http/create-aks";
+import { z } from "zod";
+
+type Ask = {
+  id: string;
+  description: string;
+  answered: boolean;
+  reactions: number;
+};
+
+const askSchema = z.object({
+  description: z.string().min(1),
+});
 
 export function Room() {
+  const queryClient = useQueryClient();
   const { roomId } = useParams();
   const [isCopied, setIsCopied] = useState(false);
+
+  const { data: asks } = useQuery({
+    queryKey: ["asks"],
+    queryFn: async function (): Promise<Ask[]> {
+      const response = await api.get(`room/${roomId}/asks`);
+      return response.data;
+    },
+  });
+
+  const { mutate } = useMutation({
+    mutationFn: createAsk,
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["asks"] });
+    },
+  });
 
   async function handleCopyUrl() {
     setIsCopied(true);
@@ -13,6 +45,18 @@ export function Room() {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsCopied(false);
   }
+
+  function handleCreateAsk(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const { description } = askSchema.parse(
+      Object.fromEntries(new FormData(event.target as HTMLFormElement)),
+    );
+    if (roomId) {
+      mutate({ description, roomId });
+    }
+  }
+
+  if (!asks) return;
 
   return (
     <div className="w-full h-screen pt-10">
@@ -76,25 +120,30 @@ export function Room() {
 
         <hr className="w-full h-px dark:border-zinc-900" />
 
-        <div className="w-full flex items-center rounded-xl border dark:bg-zinc-900 dark:border-zinc-800 p-2 ring-2 ring-transparent ring-offset-4 ring-offset-zinc-950 focus-within:ring-orange-400">
+        <form
+          onSubmit={handleCreateAsk}
+          className="w-full flex items-center rounded-xl border dark:bg-zinc-900 dark:border-zinc-800 p-2 ring-2 ring-transparent ring-offset-4 ring-offset-zinc-950 focus-within:ring-orange-400"
+        >
           <input
             className="text-sm flex-1 bg-transparent outline-none pl-2 placeholder-zinc-500"
             placeholder="Nome da sala"
             type="text"
+            name="description"
           />
           <button className="text-sm font-medium flex items-center justify-center py-1.5 px-3 gap-1.5 bg-orange-400 text-orange-950 rounded-lg outline-none ring-2 ring-transparent ring-offset-2 ring-offset-zinc-900 focus:ring-orange-400">
             Criar pergunta
             <ArrowRight className="size-4" />
           </button>
-        </div>
+        </form>
 
         <ul className="space-y-8 list-decimal">
-          {Array.from({ length: 5 }, (_, i) => (
+          {asks.map((ask) => (
             <Task
-              key={i}
-              description="O que é GoLang e quais são suas principais vantagens em comparação com outras linguagens de programação como Python, Java ou C++?"
-              answered={i > 2}
-              reactions={Math.floor(i * Math.PI * Math.random())}
+              key={ask.id}
+              id={ask.id}
+              description={ask.description}
+              answered={ask.answered}
+              reactions={ask.reactions}
             />
           ))}
         </ul>

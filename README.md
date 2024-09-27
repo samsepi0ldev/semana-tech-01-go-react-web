@@ -1,9 +1,9 @@
 <h1 align="center">AMA (Ask me anything)</h1>
 
 <p align="center">
-  <img src="https://img.shields.io/github/license/samsepi0ldev/semana-tech-01-go-react-web?color=blueviolet&logo=License&style=for-the-badge"/>
-  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/samsepi0ldev/semana-tech-01-go-react-web?color=blueviolet&logo=TypeScript&logoColor=white&style=for-the-badge">
-  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/samsepi0ldev/semana-tech-01-go-react-web?color=blueviolet&style=for-the-badge">
+  <img src="https://img.shields.io/github/license/samsepi0ldev/semana-tech-01-go-react-web?color=orange&logo=License&style=for-the-badge"/>
+  <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/samsepi0ldev/semana-tech-01-go-react-web?color=orange&logo=TypeScript&logoColor=white&style=for-the-badge">
+  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/samsepi0ldev/semana-tech-01-go-react-web?color=orange&style=for-the-badge">
 </p>
 <p style="text-align: center">
   O projeto é um site desktop de sala de perguntas.

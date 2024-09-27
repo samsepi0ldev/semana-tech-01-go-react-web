@@ -1,9 +1,9 @@
 import fastify from "fastify";
-import websocket, { WebSocket } from "@fastify/websocket";
+import websocket, { type WebSocket } from "@fastify/websocket";
 import {
   serializerCompiler,
   validatorCompiler,
-  ZodTypeProvider,
+  type ZodTypeProvider,
 } from "fastify-type-provider-zod";
 import z from "zod";
 import { eq, and, sql } from "drizzle-orm";
@@ -11,13 +11,6 @@ import { asc } from "drizzle-orm";
 
 import { db } from "./db";
 import { rooms, asks } from "./db/schema";
-
-const event = {
-  MessageKindMessageCreated: "message_created",
-  MessageKindMessageRactionIncreased: "message_reaction_increased",
-  MessageKindMessageRactionDecreased: "message_reaction_decreased",
-  MessageKindMessageAnswered: "message_answered",
-};
 
 const subscribers = {} as { [key: string]: Set<WebSocket> };
 
@@ -139,7 +132,7 @@ app.patch(
 );
 
 app.patch(
-  "/room/:roomId/ask/:askId/unreact",
+  "/room/:roomId/ask/:askId/un-react",
   {
     schema: {
       params: z.object({
@@ -193,10 +186,12 @@ app.patch(
       value: data[0],
       roomId,
     });
+
+    return reply.status(204).send()
   },
 );
 
-const notifyClients = (roomID: string, message: { [key: string]: any }) => {
+const notifyClients = (roomID: string, message: { [key: string]: unknown }) => {
   if (subscribers[roomID]) {
     for (const client of subscribers[roomID]) {
       client.send(JSON.stringify(message));
@@ -204,7 +199,7 @@ const notifyClients = (roomID: string, message: { [key: string]: any }) => {
   }
 };
 
-app.register(async function () {
+app.register(async () => {
   app.get(
     "/subscribe/:roomId",
     {

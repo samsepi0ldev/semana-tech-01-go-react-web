@@ -1,43 +1,18 @@
 import { ArrowRight, Check, Share2 } from "lucide-react";
-import { FormEvent, useState } from "react";
+import { FormEvent, Suspense, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { api } from "../lib/api";
-import { Task } from "../components/task";
 import { createAsk } from "./http/create-aks";
 import { z } from "zod";
-
-type Ask = {
-  id: string;
-  description: string;
-  answered: boolean;
-  reactions: number;
-};
+import { Messages } from "../components/messages";
 
 const askSchema = z.object({
   description: z.string().min(1),
 });
 
 export function Room() {
-  const queryClient = useQueryClient();
-  const { roomId } = useParams();
   const [isCopied, setIsCopied] = useState(false);
-
-  const { data: asks } = useQuery({
-    queryKey: ["asks"],
-    queryFn: async function (): Promise<Ask[]> {
-      const response = await api.get(`room/${roomId}/asks`);
-      return response.data;
-    },
-  });
-
-  const { mutate } = useMutation({
-    mutationFn: createAsk,
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["asks"] });
-    },
-  });
+  const { roomId } = useParams();
 
   async function handleCopyUrl() {
     setIsCopied(true);
@@ -48,15 +23,15 @@ export function Room() {
 
   function handleCreateAsk(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const formData = event.target as HTMLFormElement;
     const { description } = askSchema.parse(
-      Object.fromEntries(new FormData(event.target as HTMLFormElement)),
+      Object.fromEntries(new FormData(formData)),
     );
     if (roomId) {
-      mutate({ description, roomId });
+      createAsk({ description, roomId });
+      formData.reset();
     }
   }
-
-  if (!asks) return;
 
   return (
     <div className="w-full h-screen pt-10">
@@ -136,17 +111,9 @@ export function Room() {
           </button>
         </form>
 
-        <ul className="space-y-8 list-decimal">
-          {asks.map((ask) => (
-            <Task
-              key={ask.id}
-              id={ask.id}
-              description={ask.description}
-              answered={ask.answered}
-              reactions={ask.reactions}
-            />
-          ))}
-        </ul>
+        <Suspense fallback={<span>Carregando...</span>}>
+          <Messages />
+        </Suspense>
       </div>
     </div>
   );

@@ -5,7 +5,9 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "preview": "turbo run preview",
-    "migrate": "turbo run migrate"
+    "migrate": "turbo run migrate",
+    "generate": "turbo run generate",
+    "seed": "turbo run seed"
   },
   "devDependencies": {
     "turbo": "^2.1.2"

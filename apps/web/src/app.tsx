@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { CreateRoom } from "./pages/create-room";
 import { Room } from "./pages/room";
+import { Toaster } from "sonner";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
+      <Toaster />
     </QueryClientProvider>
   );
 }

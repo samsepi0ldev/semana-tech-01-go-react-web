@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import { FormEvent } from "react";
+import type { FormEvent } from "react";
 
 import logo from "../assets/logo.svg";
 import { createRoom } from "./http/create-room";
@@ -49,7 +49,7 @@ export function CreateRoom() {
             type="text"
             name="title"
           />
-          <button className="text-sm font-medium flex items-center justify-center py-1.5 px-3 gap-1.5 bg-orange-400 text-orange-950 rounded-lg outline-none ring-2 ring-transparent ring-offset-2 ring-offset-zinc-900 focus:ring-orange-400">
+          <button type="submit" className="text-sm font-medium flex items-center justify-center py-1.5 px-3 gap-1.5 bg-orange-400 text-orange-950 rounded-lg outline-none ring-2 ring-transparent ring-offset-2 ring-offset-zinc-900 focus:ring-orange-400">
             Criar sala
             <ArrowRight className="size-4" />
           </button>

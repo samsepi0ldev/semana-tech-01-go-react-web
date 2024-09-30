@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 
-import { ResponseMessages } from "../pages/http/get-messages";
+import type { ResponseMessages } from "../pages/http/get-messages";
 
 interface UseMessageWebsocketsProps {
   roomId?: string;

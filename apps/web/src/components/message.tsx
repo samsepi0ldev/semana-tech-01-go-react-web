@@ -1,4 +1,4 @@
-import { ArrowUp, ThumbsDown, ThumbsUp } from "lucide-react";
+import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 
@@ -6,7 +6,6 @@ import { cn } from "../utils/cn";
 
 import { createMessageReaction } from "../pages/http/create-message-reaction";
 import { removeMessageReaction } from "../pages/http/remove-message-reaction";
-import { useMessageWebsockets } from "../hooks/use-message-websocket";
 
 interface MessageProps {
   id: string;
@@ -52,8 +51,6 @@ export function Message({
     setHasReacted(false);
   }
 
-  useMessageWebsockets({ roomId });
-
   return (
     <li className={cn("space-y-3", answered && "opacity-50")}>
       <span className="dark:text-zinc-100">{description}</span>
@@ -63,6 +60,7 @@ export function Message({
           disabled={answered}
           data-active={hasReacted}
           onClick={removeMessageReactionAction}
+          type="button"
         >
           <ThumbsDown className="size-4" />
           Curtir pergunta ({reactions})
@@ -73,6 +71,7 @@ export function Message({
           disabled={answered}
           data-active={hasReacted}
           onClick={createMessageReactionAction}
+          type="button"
         >
           <ThumbsUp className="size-4" />
           Curtir pergunta ({reactions})

@@ -9,5 +9,5 @@ export async function removeMessageReaction({
   id,
   roomId,
 }: RequestRemoveMessageReaction) {
-  await api.patch(`room/${roomId}/ask/${id}/unreact`);
+  await api.patch(`room/${roomId}/ask/${id}/un-react`);
 }

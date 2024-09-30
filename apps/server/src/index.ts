@@ -1,5 +1,5 @@
 import fastify from "fastify";
-import websocket, { type WebSocket } from "@fastify/websocket";
+import websocket from "@fastify/websocket";
 import {
   serializerCompiler,
   validatorCompiler,

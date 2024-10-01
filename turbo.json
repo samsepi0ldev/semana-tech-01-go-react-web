@@ -12,9 +12,9 @@
       "cache": false
     },
     "preview": {},
-    "db:generate": {},
-    "db:migrate": {},
-    "db:studio": {},
-    "db:seed": {}
+    "generate": {},
+    "migrate": {},
+    "studio": {},
+    "seed": {}
   }
 }

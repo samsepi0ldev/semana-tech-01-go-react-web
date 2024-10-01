@@ -26,6 +26,6 @@ app.register(require("@fastify/cors"), {
   origin: "*",
 });
 
-const PORT = env.PORT || 4000
+const PORT = env.PORT || 3000
 
-app.listen({ port: PORT });
+app.listen({ host: "0.0.0.0", port: PORT });

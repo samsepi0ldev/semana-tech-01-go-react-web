@@ -10,6 +10,7 @@ import {
   type ZodTypeProvider,
 } from "fastify-type-provider-zod";
 import { registerRoutes } from "./routes/routes";
+import { env } from './env';
 
 const app = fastify({
   logger: true,
@@ -25,4 +26,4 @@ app.register(require("@fastify/cors"), {
   origin: "*",
 });
 
-app.listen({ port: 3000 });
+app.listen({ port: env.PORT || 3000 });

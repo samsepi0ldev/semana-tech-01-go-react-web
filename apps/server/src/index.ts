@@ -1,3 +1,7 @@
+import dotenv from 'dotenv'
+
+dotenv.config()
+
 import fastify from "fastify";
 import websocket from "@fastify/websocket";
 import {

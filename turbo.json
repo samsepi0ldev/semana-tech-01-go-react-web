@@ -11,6 +11,7 @@
       "persistent": true,
       "cache": false
     },
+    "preview": {},
     "db:generate": {},
     "db:migrate": {},
     "db:studio": {},

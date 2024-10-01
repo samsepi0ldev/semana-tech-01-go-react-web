@@ -2,6 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 import type { ResponseMessages } from "../pages/http/get-messages";
+import { env } from "../env";
 
 interface UseMessageWebsocketsProps {
   roomId?: string;
@@ -22,7 +23,7 @@ export function useMessageWebsockets({ roomId }: UseMessageWebsocketsProps) {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    const ws = new WebSocket(`ws://localhost:3000/subscribe/${roomId}`);
+    const ws = new WebSocket(`${env.VITE_API_WEBSOCKET}${roomId}`);
 
     ws.onopen = () => {
       console.log("Websocket Connected!");

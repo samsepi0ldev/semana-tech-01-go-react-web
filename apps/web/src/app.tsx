@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     path: "/room/:roomId",
     element: <Room />,
   },
-]);
+], { basename: import.meta.env.DEV ? '/' : '/my-vite-react-app/' });
 
 export function App() {
   return (
